@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Universal Currency Converter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        margin:0;
+        font-family: Arial, sans-serif;
+        background:#f5f5f5;
+        color:#333;
+    }
+    header {
+        background:#24292e;
+        padding:20px;
+        text-align:center;
+        color:white;
+    }
+    h1 { margin:0; }
+    .container {
+        max-width:900px;
+        margin:40px auto;
+        background:white;
+        padding:25px;
+        border-radius:10px;
+        box-shadow:0 0 15px rgba(0,0,0,0.1);
+    }
+    .converter-box {
+        margin-bottom:35px;
+        padding:20px;
+        border-radius:10px;
+        background:#fafafa;
+        border:1px solid #ddd;
+    }
+    label { display:block; margin:10px 0 5px; font-weight:bold; }
+    input, select {
+        width:100%;
+        padding:10px;
+        border:1px solid #ccc;
+        border-radius:5px;
+        margin-bottom:15px;
+        font-size:16px;
+    }
+    button {
+        padding:12px 20px;
+        background:#007bff;
+        color:white;
+        border:none;
+        border-radius:5px;
+        cursor:pointer;
+        font-size:16px;
+    }
+    button:hover { background:#0056d2; }
+    .result {
+        margin-top:10px;
+        font-size:18px;
+        font-weight:bold;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Universal Currency Converter</h1>
+    <p>Convert Diamonds, Robux, Dollars & More</p>
+</header>
+
+<div class="container">
+
+    <!-- LANDING PAGE SECTION -->
+    <section class="converter-box">
+        <h2>Welcome!</h2>
+        <p>This website allows you to convert: </p>
+        <ul>
+            <li>💎 Diamonds → Money</li>
+            <li>🟩 Robux → Money</li>
+            <li>💵 USD → Other Currency</li>
+            <li>🌍 Any currency → any other currency</li>
+        </ul>
+        <p>Scroll down to start converting!</p>
+    </section>
+
+    <!-- DIAMOND TO MONEY -->
+    <section class="converter-box">
+        <h2>💎 Diamond to Money Converter</h2>
+        <label>Enter Diamond Amount:</label>
+        <input type="number" id="diamondInput" placeholder="Enter diamonds">
+        <button onclick="convertDiamond()">Convert</button>
+        <div class="result" id="diamondResult"></div>
+    </section>
+
+    <!-- ROBUX TO MONEY -->
+    <section class="converter-box">
+        <h2>🟩 Robux to Money Converter</h2>
+        <label>Enter Robux:</label>
+        <input type="number" id="robuxInput" placeholder="Enter Robux">
+        <button onclick="convertRobux()">Convert</button>
+        <div class="result" id="robuxResult"></div>
+    </section>
+
+    <!-- USD TO OTHER CURRENCY -->
+    <section class="converter-box">
+        <h2>💵 USD to Other Currency</h2>
+        <label>Enter USD:</label>
+        <input type="number" id="usdInput" placeholder="Enter USD">
+
+        <label>Select target currency:</label>
+        <select id="usdToCurrency">
+            <option value="EUR">Euro (EUR)</option>
+            <option value="INR">Indian Rupees (INR)</option>
+            <option value="GBP">British Pound (GBP)</option>
+            <option value="JPY">Japanese Yen (JPY)</option>
+        </select>
+
+        <button onclick="convertUSD()">Convert</button>
+        <div class="result" id="usdResult"></div>
+    </section>
+
+    <!-- ANY CURRENCY TO ANY CURRENCY -->
+    <section class="converter-box">
+        <h2>🌍 Convert Any Currency → Any Currency</h2>
+
+        <label>Enter Amount:</label>
+        <input type="number" id="anyAmount" placeholder="Amount">
+
+        <label>From Currency:</label>
+        <select id="fromCurrency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="INR">INR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
+        </select>
+
+        <label>To Currency:</label>
+        <select id="toCurrency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="INR">INR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
+        </select>
+
+        <button onclick="convertAny()">Convert</button>
+        <div class="result" id="anyResult"></div>
+    </section>
+</div>
+
+<script>
+// -------------------------- CONVERSION RATES --------------------------
+const diamondRate = 0.5; // 1 Diamond = $0.50 (change as you want)
+const robuxRate = 0.0125; // 1 Robux = $0.0125 (approx)
+
+const currencyRates = {
+    "USD": 1,
+    "EUR": 0.92,
+    "INR": 83,
+    "GBP": 0.78,
+    "JPY": 156
+};
+
+// -------------------------- FUNCTIONS --------------------------
+function convertDiamond() {
+    let diamonds = document.getElementById("diamondInput").value;
+    if (!diamonds) return;
+    let money = diamonds * diamondRate;
+    document.getElementById("diamondResult").innerText =
+        `$${money.toFixed(2)} (estimated)`;
+}
+
+function convertRobux() {
+    let robux = document.getElementById("robuxInput").value;
+    if (!robux) return;
+    let money = robux * robuxRate;
+    document.getElementById("robuxResult").innerText =
+        `$${money.toFixed(2)} (estimated)`;
+}
+
+function convertUSD() {
+    let usd = document.getElementById("usdInput").value;
+    if (!usd) return;
+    let target = document.getElementById("usdToCurrency").value;
+    let result = usd * currencyRates[target];
+    document.getElementById("usdResult").innerText =
+        `${result.toFixed(2)} ${target}`;
+}
+
+function convertAny() {
+    let amount = document.getElementById("anyAmount").value;
+    let from = document.getElementById("fromCurrency").value;
+    let to = document.getElementById("toCurrency").value;
+
+    if (!amount) return;
+
+    let usdValue = amount / currencyRates[from];
+    let finalAmount = usdValue * currencyRates[to];
+
+    document.getElementById("anyResult").innerText =
+        `${finalAmount.toFixed(2)} ${to}`;
+}
+</script>
+
+</body>
+</html>
